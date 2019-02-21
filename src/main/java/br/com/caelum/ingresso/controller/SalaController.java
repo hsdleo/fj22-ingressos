@@ -77,16 +77,13 @@ public class SalaController {
 		return modelAndView;
 	}
 
-	@GetMapping("/admin/sala/{id}/sessoes/")
+	@GetMapping("/admin/sala/{id}/sessoes")
 	public ModelAndView listaSessoes(@PathVariable("id") Integer id) {
 		
 		ModelAndView modelAndView = new ModelAndView("sessao/lista");
 		Sala sala = salaDao.findOne(id);
-		System.out.println("Nome sala = " + sala.getNome());
-		List<Sessao> sessoes = sessaoDao.buscaSessoesDaSala(sala);
 		modelAndView.addObject("sala", salaDao.findOne(sala.getId()));
-
-		modelAndView.addObject("sessoes", sessoes);
+		modelAndView.addObject("sessoes", sessaoDao.buscaSessoesDaSala(sala));
 		
 		return modelAndView;
 	}
