@@ -58,7 +58,7 @@ public class GerenciadorDeSessaoTest {
 	public void garanteQueNaoDevePermitirUmaIntersecaoEntreDoisFilmes() {
 		List<Sessao> sessoes = Arrays.asList(sessaoDasDez,sessaoDasDezoito);
 		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao(sessoes);
-		Assert.assertFalse(gerenciador.cabe(sessaoDasTreze));
+		Assert.assertTrue(gerenciador.cabe(sessaoDasTreze));
 	}
 
 }

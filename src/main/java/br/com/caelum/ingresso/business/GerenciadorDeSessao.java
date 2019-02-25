@@ -26,17 +26,17 @@ public class GerenciadorDeSessao {
 		LocalDateTime horarioSessaoExistente = sessaoExistente.getHorario().atDate(hoje);
 		LocalDateTime terminoSessaoExistente = sessaoExistente.getHorarioTermino().atDate(hoje);
 		LocalDateTime horarioSessaoNova = sessaoNova.getHorario().atDate(hoje);
-		LocalDateTime terminoessaoNova = sessaoNova.getHorarioTermino().atDate(hoje);
+		LocalDateTime terminoSessaoNova = sessaoNova.getHorarioTermino().atDate(hoje);
 
 		if (horarioSessaoNova.isEqual(horarioSessaoExistente))
 			return true;
-		if (horarioSessaoExistente.isBefore(horarioSessaoNova)) {
-			if (terminoessaoNova.isBefore(horarioSessaoNova))
+		if (horarioSessaoNova.isBefore(horarioSessaoExistente)) {
+			if (terminoSessaoNova.isBefore(horarioSessaoExistente))
 				return false;
 			else
 				return true;
 		} else {
-			if (terminoessaoNova.isBefore(horarioSessaoExistente))
+			if (terminoSessaoExistente.isBefore(horarioSessaoNova))
 				return false;
 			else
 				return true;
