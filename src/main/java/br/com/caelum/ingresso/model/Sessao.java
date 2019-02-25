@@ -65,6 +65,10 @@ public class Sessao {
 		this.horario = horario;
 		this.sala = sala;
 		this.filme = filme;
+	
+	}
+	public LocalTime getHorarioTermino() {
+		return this.horario.plus(this.filme.getDuracao());
 	}
 	
 	
