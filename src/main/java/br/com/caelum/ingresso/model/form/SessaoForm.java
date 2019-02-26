@@ -1,5 +1,6 @@
 package br.com.caelum.ingresso.model.form;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 
 import javax.validation.constraints.NotNull;

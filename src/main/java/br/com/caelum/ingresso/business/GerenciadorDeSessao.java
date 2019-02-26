@@ -22,7 +22,6 @@ public class GerenciadorDeSessao {
 	private boolean horarioConflitante(Sessao sessaoExistente, Sessao sessaoNova) {
 
 		LocalDate hoje = LocalDate.now();
-
 		LocalDateTime horarioSessaoExistente = sessaoExistente.getHorario().atDate(hoje);
 		LocalDateTime terminoSessaoExistente = sessaoExistente.getHorarioTermino().atDate(hoje);
 		LocalDateTime horarioSessaoNova = sessaoNova.getHorario().atDate(hoje);
