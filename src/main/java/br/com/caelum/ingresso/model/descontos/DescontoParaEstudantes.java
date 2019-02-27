@@ -7,9 +7,14 @@ import br.com.caelum.ingresso.model.Sessao;
 public class DescontoParaEstudantes implements Desconto {
 
 	@Override
-	public BigDecimal aplicaDesconto(Sessao sessao) {
+	public BigDecimal aplicaDesconto(BigDecimal valor) {
 		// TODO Auto-generated method stub
-		return sessao.getPreco().multiply(new BigDecimal(0.5));
+		return valor.multiply(new BigDecimal(0.5));
 	}
 
+	@Override
+	public String getDescricao() {
+		// TODO Auto-generated method stub
+		return "Desconto para Estudante";
+	}
 }
