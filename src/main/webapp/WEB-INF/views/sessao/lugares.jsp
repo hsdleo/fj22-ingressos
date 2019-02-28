@@ -27,6 +27,7 @@
 			</div>
 		</div>
 		<div class="main">
+			
 			<h2>Lugares</h2>
 			<table class="table-compra" id="lugares">
 				<tbody>
@@ -39,9 +40,9 @@
 								<c:forEach var="lugar" items="${map.value}">
 									<td class="fileira-assento"><figure>
 										<svg
-															class="assento ${sessao.isDisponivel(lugar) ? 'disponivel':'ocupado' }"
+															class="assento ${sessao.isDisponivel(lugar) && !carrinho.isSelecionado(lugar) ? 'disponivel':'ocupado' }"
 															id="${lugar.id}"
-															onclick="${sessao.isDisponivel(lugar) ? 'changeCheckbox(this)' : ''}"
+															onclick="${sessao.isDisponivel(lugar) && !carrinho.isSelecionado(lugar) ? 'changeCheckbox(this)' : ''}"
 															version="1.0" id="SEAT"
 															xmlns="http://www.w3.org/2000/svg"
 															xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"

@@ -1,10 +1,9 @@
 package br.com.caelum.ingresso.controller;
 
-import br.com.caelum.ingresso.dao.LugarDao;
-import br.com.caelum.ingresso.dao.SalaDao;
-import br.com.caelum.ingresso.model.form.LugarForm;
-import br.com.caelum.ingresso.model.Lugar;
-import br.com.caelum.ingresso.model.Sala;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
+import br.com.caelum.ingresso.dao.LugarDao;
+import br.com.caelum.ingresso.dao.SalaDao;
+import br.com.caelum.ingresso.model.Lugar;
+import br.com.caelum.ingresso.model.Sala;
+import br.com.caelum.ingresso.model.form.LugarForm;
 
 /**
  * Created by nando on 03/03/17.
@@ -22,43 +25,72 @@ import javax.validation.Valid;
 @Controller
 public class LugarController {
 
+	@Autowired
+	private SalaDao salaDao;
+	@Autowired
+	private LugarDao lugarDao;
 
-    @Autowired
-    private SalaDao salaDao;
-    @Autowired
-    private LugarDao lugarDao;
+	@GetMapping("/admin/lugar")
+	public ModelAndView form(@RequestParam("salaId") Integer salaId, LugarForm lugarDto) {
 
-    @GetMapping("/admin/lugar")
-    public ModelAndView form(@RequestParam("salaId") Integer salaId, LugarForm lugarDto) {
+		lugarDto.setSalaId(salaId);
 
-        lugarDto.setSalaId(salaId);
+		ModelAndView view = new ModelAndView("lugar/lugar");
 
-        ModelAndView view = new ModelAndView("lugar/lugar");
+		view.addObject("lugarDto", lugarDto);
 
-        view.addObject("lugarDto", lugarDto);
+		return view;
+	}
 
-        return view;
-    }
+	@GetMapping("/admin/lugares")
+	public ModelAndView forms(@RequestParam("salaId") Integer salaId, LugarForm lugarDto) {
 
+		lugarDto.setSalaId(salaId);
 
+		ModelAndView view = new ModelAndView("lugar/lugares");
 
-    @PostMapping("/admin/lugar")
-    @Transactional
-    public ModelAndView salva(@Valid LugarForm lugarDto, BindingResult result) {
+		view.addObject("lugarDto", lugarDto);
 
-        if (result.hasErrors()) return form(lugarDto.getSalaId(), lugarDto);
+		return view;
+	}
+	
+	@PostMapping("/admin/lugar")
+	@Transactional
+	public ModelAndView salva(@Valid LugarForm lugarDto, BindingResult result) {
 
-        Integer salaId = lugarDto.getSalaId();
+		if (result.hasErrors())
+			return form(lugarDto.getSalaId(), lugarDto);
 
-        Lugar lugar = lugarDto.toLugar();
-        lugarDao.save(lugar);
+		Integer salaId = lugarDto.getSalaId();
 
-        Sala sala = salaDao.findOne(salaId);
-        sala.add(lugar);
+		Lugar lugar = lugarDto.toLugar();
+		lugarDao.save(lugar);
 
-        salaDao.save(sala);
+		Sala sala = salaDao.findOne(salaId);
+		sala.add(lugar);
 
-        return new ModelAndView("redirect:/admin/sala/"+salaId+"/lugares/");
-    }
+		salaDao.save(sala);
+
+		return new ModelAndView("redirect:/admin/sala/" + salaId + "/lugares/");
+	}
+
+	@PostMapping("/admin/lugares")
+	@Transactional
+	public ModelAndView salvaFileira(@Valid LugarForm lugarDto, BindingResult result) {
+
+		if (result.hasErrors())
+			return form(lugarDto.getSalaId(), lugarDto);
+
+		Integer salaId = lugarDto.getSalaId();
+		Sala sala = salaDao.findOne(salaId);
+		List<Lugar> lugares = lugarDto.toLugares(lugarDto.getPosicao());
+		lugares.stream().forEach(l -> {
+			lugarDao.save(l);
+			sala.add(l);
+		});
+		salaDao.save(sala);
+
+		return new ModelAndView("redirect:/admin/sala/" + salaId + "/lugares/");
+	}
 
 }
